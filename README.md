@@ -33,6 +33,13 @@ It includes:
 - Admin password reset for local accounts
 - Admin deletion of regular users and their related workspace content
 - Activity logging for sign-ins and tracked workspace actions
+---
+##Live Deployment
+
+Portfolio: https://shakiara.github.io/MyPortafolio/
+UI Showcase: https://shakiara.github.io/MyPortafolio/ui-showcase.html
+
+The repository now includes a GitHub Pages workflow to publish the site automatically from main.
 
 ## Tech Stack
 
