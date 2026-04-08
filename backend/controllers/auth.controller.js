@@ -17,14 +17,22 @@ const {
 ensureAdminUser();
 
 function getBaseUrl(req) {
-  return `${req.protocol}://${req.get("host")}`;
+  const forwardedProto = req.get("x-forwarded-proto");
+  const protocol = process.env.NODE_ENV === "production"
+    ? forwardedProto || "https"
+    : req.protocol;
+  return `${protocol}://${req.get("host")}`;
+}
+
+function getPublicBaseUrl(req) {
+  return process.env.APP_URL || process.env.RENDER_EXTERNAL_URL || getBaseUrl(req);
 }
 
 function getGoogleConfig(req) {
   return {
     clientId: process.env.GOOGLE_CLIENT_ID || "",
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-    redirectUri: process.env.GOOGLE_REDIRECT_URI || `${getBaseUrl(req)}/api/auth/google/callback`
+    redirectUri: process.env.GOOGLE_REDIRECT_URI || `${getPublicBaseUrl(req)}/api/auth/google/callback`
   };
 }
 
@@ -32,7 +40,7 @@ function getGithubConfig(req) {
   return {
     clientId: process.env.GITHUB_CLIENT_ID || "",
     clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
-    redirectUri: process.env.GITHUB_REDIRECT_URI || `${getBaseUrl(req)}/api/auth/github/callback`
+    redirectUri: process.env.GITHUB_REDIRECT_URI || `${getPublicBaseUrl(req)}/api/auth/github/callback`
   };
 }
 
@@ -175,8 +183,12 @@ function startGoogleAuth(req, res) {
 }
 
 async function googleCallback(req, res) {
-  const { code, state } = req.query;
+  const { code, state, error } = req.query;
   const config = getGoogleConfig(req);
+
+  if (error) {
+    return redirectWithError(res, "Google sign-in was cancelled or denied.");
+  }
 
   if (!code || !state || !consumeOauthState(state, "google")) {
     return redirectWithError(res, "Google authentication failed.");
@@ -251,8 +263,12 @@ function startGithubAuth(req, res) {
 }
 
 async function githubCallback(req, res) {
-  const { code, state } = req.query;
+  const { code, state, error } = req.query;
   const config = getGithubConfig(req);
+
+  if (error) {
+    return redirectWithError(res, "GitHub sign-in was cancelled or denied.");
+  }
 
   if (!code || !state || !consumeOauthState(state, "github")) {
     return redirectWithError(res, "GitHub authentication failed.");

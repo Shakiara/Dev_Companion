@@ -429,11 +429,17 @@ function getSessionFromRequest(req) {
 
 function buildSessionCookie(token) {
   const maxAge = Math.floor(SESSION_DURATION_MS / 1000);
-  return `${SESSION_COOKIE}=${encodeURIComponent(token)}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${maxAge}`;
+  const secureFlag = process.env.NODE_ENV === "production" || String(process.env.APP_URL || "").startsWith("https://")
+    ? "; Secure"
+    : "";
+  return `${SESSION_COOKIE}=${encodeURIComponent(token)}; HttpOnly; Path=/; SameSite=Lax; Max-Age=${maxAge}${secureFlag}`;
 }
 
 function buildLogoutCookie() {
-  return `${SESSION_COOKIE}=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0`;
+  const secureFlag = process.env.NODE_ENV === "production" || String(process.env.APP_URL || "").startsWith("https://")
+    ? "; Secure"
+    : "";
+  return `${SESSION_COOKIE}=; HttpOnly; Path=/; SameSite=Lax; Max-Age=0${secureFlag}`;
 }
 
 module.exports = {
