@@ -39,8 +39,7 @@ It includes:
 ## Live Deployment
 
 - Portfolio: https://shakiara.github.io/MyPortafolio/
-- Dev Companion: [https://shakiara.github.io/MyPortafolio/ui-showcase.html](https://shakiara.github.io/Dev_Companion/)
-
+- Dev Companion: N/A
 The repository now includes a GitHub Pages workflow to publish the site automatically from main.
 
 ---
