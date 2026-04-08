@@ -39,7 +39,8 @@ It includes:
 ## Live Deployment
 
 - Portfolio: https://shakiara.github.io/MyPortafolio/
-- Dev Companion: N/A
+- Dev Companion: dev-companion.onrender.com
+  
 The repository now includes a GitHub Pages workflow to publish the site automatically from main.
 
 ---
