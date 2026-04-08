@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dev Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body>
+    <div id="auth-shell" class="auth-shell">
+      <section class="auth-panel">
+        <div class="auth-copy">
+          <p class="eyebrow">Secure access</p>
+          <h1 id="auth-title">Sign in to Dev Companion</h1>
+          <p id="auth-subtitle" class="hero-copy">
+            You need an account session to access the dashboard, projects, ideas, errors, and notes.
+          </p>
+        </div>
+
+        <form id="login-form" class="surface auth-form">
+          <div class="auth-switch">
+            <button type="button" id="signin-mode-button" class="secondary-button auth-mode-button active-mode">
+              Sign In
+            </button>
+            <button type="button" id="register-mode-button" class="ghost-button auth-mode-button">
+              Create Account
+            </button>
+          </div>
+          <div id="display-name-row" class="form-row hidden">
+            <label for="login-display-name">Display name</label>
+            <input id="login-display-name" name="displayName" type="text" placeholder="Enter your name" />
+          </div>
+          <div class="form-row">
+            <label for="login-username">Username</label>
+            <input id="login-username" name="username" type="text" placeholder="Enter your username" required />
+          </div>
+          <div class="form-row">
+            <label for="login-password">Password</label>
+            <input id="login-password" name="password" type="password" placeholder="Enter your password" required />
+          </div>
+          <div class="form-actions auth-actions">
+            <span id="login-feedback" class="feedback"></span>
+            <button type="submit" class="primary-button">Sign In</button>
+          </div>
+          <div class="auth-divider">
+            <span>or continue with</span>
+          </div>
+          <div class="social-auth-list">
+            <a class="ghost-button social-auth-button" href="/api/auth/google/start">Google</a>
+            <a class="ghost-button social-auth-button" href="/api/auth/github/start">GitHub</a>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <div id="app-shell" class="app-shell hidden">
+      <aside class="sidebar">
+        <div class="brand-block">
+          <p class="eyebrow">Workspace</p>
+          <h1>Dev Companion</h1>
+          <p class="brand-copy">
+            Start fresh and organize your projects, ideas, debugging history, and notes in one place.
+          </p>
+        </div>
+
+        <nav class="nav-list">
+          <button class="nav-button active" data-section="dashboard">Dashboard</button>
+          <button id="users-nav-button" class="nav-button hidden" data-section="users">Users</button>
+          <button class="nav-button" data-section="projects">Projects</button>
+          <button class="nav-button" data-section="ideas">Ideas</button>
+          <button class="nav-button" data-section="errors">Errors</button>
+          <button class="nav-button" data-section="notes">Notes</button>
+        </nav>
+
+        <div class="sidebar-card">
+          <p class="sidebar-label">Welcome</p>
+          <strong>Your workspace is empty</strong>
+          <p>Create your first project, idea, error, or note whenever you are ready.</p>
+        </div>
+
+        <div class="sidebar-card session-card">
+          <p class="sidebar-label">Session</p>
+          <strong id="session-user-label">Signed in</strong>
+          <button id="logout-button" class="ghost-button full-width-button">Log Out</button>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header id="dashboard-hero" class="hero">
+          <div>
+            <p class="eyebrow">Fresh workspace</p>
+            <h2>Start your first build with clarity.</h2>
+            <p class="hero-copy">
+              Dev Companion is ready for a brand new start, with empty modules and a dashboard that grows as you add data.
+            </p>
+          </div>
+          <div class="hero-actions">
+            <button class="secondary-button" data-jump="dashboard">Refresh Summary</button>
+            <button class="primary-button" data-jump="projects">Add Project</button>
+          </div>
+        </header>
+
+        <div class="banner-row">
+          <div class="banner-card">
+            <p class="surface-label">Data source</p>
+            <strong id="data-source-label">Checking connection...</strong>
+          </div>
+          <div class="banner-card">
+            <p class="surface-label">Status</p>
+            <strong id="app-message">Loading Dev Companion...</strong>
+          </div>
+        </div>
+
+        <section id="dashboard" class="section-panel active">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Overview</p>
+              <h3>Dashboard</h3>
+            </div>
+          </div>
+
+          <div class="stats-grid" id="stats-grid"></div>
+
+          <div class="dashboard-grid">
+            <article class="surface">
+              <p class="surface-label">Latest project</p>
+              <div id="latest-project" class="dashboard-slot empty-state compact">
+                <p>No project data yet.</p>
+              </div>
+            </article>
+
+            <article class="surface">
+              <p class="surface-label">Recent activity</p>
+              <div id="dashboard-activity" class="activity-grid"></div>
+            </article>
+          </div>
+
+        </section>
+
+        <section id="users" class="section-panel">
+          <div id="admin-dashboard-panel" class="admin-dashboard-panel hidden">
+            <div class="section-header admin-section-header">
+              <div>
+                <p class="eyebrow">Admin</p>
+                <h3>User Monitor</h3>
+                <p class="hero-copy admin-copy">
+                  Review who entered your site, how they signed in, what they changed in the workspace, and manage regular accounts.
+                </p>
+              </div>
+            </div>
+
+            <div id="admin-summary-grid" class="stats-grid admin-summary-grid"></div>
+
+            <article class="surface admin-surface">
+              <div class="admin-toolbar">
+                <div class="form-row">
+                  <label for="admin-search">Search by name or username</label>
+                  <input id="admin-search" type="text" placeholder="Search users, sign-ins, or activity" />
+                </div>
+                <div class="form-row">
+                  <label for="admin-provider-filter">Provider</label>
+                  <select id="admin-provider-filter">
+                    <option value="all">All providers</option>
+                  </select>
+                </div>
+                <div class="form-row">
+                  <label for="admin-user-filter">User</label>
+                  <select id="admin-user-filter">
+                    <option value="all">All users</option>
+                  </select>
+                </div>
+              </div>
+              <div id="admin-feedback" class="feedback admin-feedback"></div>
+            </article>
+
+            <div class="dashboard-grid admin-grid">
+              <article class="surface">
+                <p class="surface-label">Users and account access</p>
+                <div id="users-list" class="resource-grid admin-list"></div>
+              </article>
+
+              <article class="surface">
+                <p class="surface-label">Recent sign-ins</p>
+                <div id="auth-events-list" class="activity-grid admin-events"></div>
+              </article>
+            </div>
+
+            <article class="surface admin-surface">
+              <p class="surface-label">Recent activity inside the app</p>
+              <div id="activity-events-list" class="activity-grid admin-events"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="projects" class="section-panel">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Core module</p>
+              <h3>Projects</h3>
+            </div>
+            <button class="secondary-button toggle-form-button" data-form-target="project-form">New Project</button>
+          </div>
+
+          <form id="project-form" class="surface form-panel hidden" data-module="projects">
+            <input type="hidden" name="id" />
+            <div class="form-grid">
+              <div class="form-row">
+                <label for="project-title">Title</label>
+                <input id="project-title" name="title" type="text" placeholder="Project title" required />
+              </div>
+              <div class="form-row">
+                <label for="project-status">Status</label>
+                <select id="project-status" name="status">
+                  <option value="pending">Pending</option>
+                  <option value="in_progress">In progress</option>
+                  <option value="completed">Completed</option>
+                </select>
+              </div>
+              <div class="form-row form-row-full">
+                <label for="project-description">Description</label>
+                <textarea
+                  id="project-description"
+                  name="description"
+                  rows="4"
+                  placeholder="What is this project about?"
+                ></textarea>
+              </div>
+            </div>
+            <div class="form-actions">
+              <span class="feedback" data-feedback-for="projects"></span>
+              <div class="button-row">
+                <button type="button" class="ghost-button reset-form-button" data-form-target="project-form">Cancel</button>
+                <button type="submit" class="primary-button">Save Project</button>
+              </div>
+            </div>
+          </form>
+
+          <div id="projects-list" class="resource-grid"></div>
+        </section>
+
+        <section id="ideas" class="section-panel">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Module</p>
+              <h3>Ideas</h3>
+            </div>
+            <button class="secondary-button toggle-form-button" data-form-target="idea-form">New Idea</button>
+          </div>
+
+          <form id="idea-form" class="surface form-panel hidden" data-module="ideas">
+            <input type="hidden" name="id" />
+            <div class="form-grid">
+              <div class="form-row">
+                <label for="idea-project-id">Related project</label>
+                <select id="idea-project-id" name="project_id" data-project-select>
+                  <option value="">No linked project</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label for="idea-priority">Priority</label>
+                <select id="idea-priority" name="priority">
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label for="idea-title">Title</label>
+                <input id="idea-title" name="title" type="text" placeholder="Idea title" required />
+              </div>
+              <div class="form-row">
+                <label for="idea-category">Category</label>
+                <input id="idea-category" name="category" type="text" placeholder="Feature, UX, API..." />
+              </div>
+              <div class="form-row form-row-full">
+                <label for="idea-description">Description</label>
+                <textarea
+                  id="idea-description"
+                  name="description"
+                  rows="4"
+                  placeholder="Describe the idea clearly"
+                ></textarea>
+              </div>
+            </div>
+            <div class="form-actions">
+              <span class="feedback" data-feedback-for="ideas"></span>
+              <div class="button-row">
+                <button type="button" class="ghost-button reset-form-button" data-form-target="idea-form">Cancel</button>
+                <button type="submit" class="primary-button">Save Idea</button>
+              </div>
+            </div>
+          </form>
+
+          <div id="ideas-list" class="resource-grid"></div>
+        </section>
+
+        <section id="errors" class="section-panel">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Module</p>
+              <h3>Errors</h3>
+            </div>
+            <button class="secondary-button toggle-form-button" data-form-target="error-form">New Error</button>
+          </div>
+
+          <form id="error-form" class="surface form-panel hidden" data-module="errors">
+            <input type="hidden" name="id" />
+            <div class="form-grid">
+              <div class="form-row">
+                <label for="error-project-id">Related project</label>
+                <select id="error-project-id" name="project_id" data-project-select>
+                  <option value="">No linked project</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label for="error-status">Status</label>
+                <select id="error-status" name="status">
+                  <option value="pending">Pending</option>
+                  <option value="resolved">Resolved</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label for="error-title">Title</label>
+                <input id="error-title" name="title" type="text" placeholder="Error title" required />
+              </div>
+              <div class="form-row">
+                <label for="error-technology">Technology</label>
+                <input id="error-technology" name="technology" type="text" placeholder="Node.js, MySQL, CSS..." />
+              </div>
+              <div class="form-row form-row-full">
+                <label for="error-description">Description</label>
+                <textarea
+                  id="error-description"
+                  name="description"
+                  rows="3"
+                  placeholder="What happened?"
+                ></textarea>
+              </div>
+              <div class="form-row form-row-full">
+                <label for="error-solution">Solution</label>
+                <textarea
+                  id="error-solution"
+                  name="solution"
+                  rows="3"
+                  placeholder="How was it fixed?"
+                ></textarea>
+              </div>
+            </div>
+            <div class="form-actions">
+              <span class="feedback" data-feedback-for="errors"></span>
+              <div class="button-row">
+                <button type="button" class="ghost-button reset-form-button" data-form-target="error-form">Cancel</button>
+                <button type="submit" class="primary-button">Save Error</button>
+              </div>
+            </div>
+          </form>
+
+          <div id="errors-list" class="resource-grid"></div>
+        </section>
+
+        <section id="notes" class="section-panel">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Module</p>
+              <h3>Notes</h3>
+            </div>
+            <button class="secondary-button toggle-form-button" data-form-target="note-form">New Note</button>
+          </div>
+
+          <form id="note-form" class="surface form-panel hidden" data-module="notes">
+            <input type="hidden" name="id" />
+            <div class="form-grid">
+              <div class="form-row">
+                <label for="note-project-id">Related project</label>
+                <select id="note-project-id" name="project_id" data-project-select>
+                  <option value="">No linked project</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label for="note-topic">Topic</label>
+                <input id="note-topic" name="topic" type="text" placeholder="Architecture, API, UI..." />
+              </div>
+              <div class="form-row form-row-full">
+                <label for="note-title">Title</label>
+                <input id="note-title" name="title" type="text" placeholder="Note title" required />
+              </div>
+              <div class="form-row form-row-full">
+                <label for="note-content">Content</label>
+                <textarea
+                  id="note-content"
+                  name="content"
+                  rows="5"
+                  placeholder="Write the note details here"
+                ></textarea>
+              </div>
+            </div>
+            <div class="form-actions">
+              <span class="feedback" data-feedback-for="notes"></span>
+              <div class="button-row">
+                <button type="button" class="ghost-button reset-form-button" data-form-target="note-form">Cancel</button>
+                <button type="submit" class="primary-button">Save Note</button>
+              </div>
+            </div>
+          </form>
+
+          <div id="notes-list" class="resource-grid"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/js/app.js"></script>
+  </body>
+</html>

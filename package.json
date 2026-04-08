@@ -1,0 +1,25 @@
+{
+  "name": "dev-companion",
+  "version": "1.0.0",
+  "description": "Web app to organize projects, ideas, errors, and notes.",
+  "main": "backend/app.js",
+  "scripts": {
+    "start": "node backend/app.js",
+    "dev": "node backend/app.js"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mysql",
+    "crud",
+    "capstone"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "mysql2": "^3.20.0"
+  }
+}

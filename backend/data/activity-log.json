@@ -1,0 +1,52 @@
+[
+  {
+    "id": "8e3c2ef5-d263-4b60-a74c-5f1350727cb4",
+    "createdAt": "2026-04-08T12:58:50.270Z",
+    "username": "admin",
+    "displayName": "Admin",
+    "action": "delete_user",
+    "entityType": "user",
+    "entityLabel": "shakiara_inter_gmail_com",
+    "details": "Admin deleted shakiara_inter_gmail_com and related workspace content"
+  },
+  {
+    "id": "ab106980-402f-4f8b-99a7-96a629ffd9e0",
+    "createdAt": "2026-04-08T12:50:41.646Z",
+    "username": "admin",
+    "displayName": "Admin",
+    "action": "delete_user",
+    "entityType": "user",
+    "entityLabel": "deleteuser",
+    "details": "Admin deleted deleteuser and related workspace content"
+  },
+  {
+    "id": "17a476ed-fcff-4231-974f-a1a9dc321ced",
+    "createdAt": "2026-04-08T12:50:03.354Z",
+    "username": "admin",
+    "displayName": "Admin",
+    "action": "delete_user",
+    "entityType": "user",
+    "entityLabel": "cascadeuser",
+    "details": "Admin deleted cascadeuser and related workspace content"
+  },
+  {
+    "id": "30495fb3-a1e1-44bd-89ba-18c412dcda6c",
+    "createdAt": "2026-04-08T12:48:52.603Z",
+    "username": "admin",
+    "displayName": "Admin",
+    "action": "delete_user",
+    "entityType": "user",
+    "entityLabel": "shakiara",
+    "details": "Admin deleted shakiara and related workspace content"
+  },
+  {
+    "id": "6a48b7d9-40dc-43aa-9229-4559cf0ac913",
+    "createdAt": "2026-04-08T12:48:49.189Z",
+    "username": "admin",
+    "displayName": "Admin",
+    "action": "delete_user",
+    "entityType": "user",
+    "entityLabel": "testuser",
+    "details": "Admin deleted testuser and related workspace content"
+  }
+]

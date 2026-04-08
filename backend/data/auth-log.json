@@ -1,0 +1,83 @@
+[
+  {
+    "id": "cf78e6ec-32d3-40af-b3bb-9287b852bdf8",
+    "createdAt": "2026-04-08T12:58:36.987Z",
+    "type": "login",
+    "provider": "local",
+    "username": "admin",
+    "displayName": "Admin",
+    "email": null
+  },
+  {
+    "id": "4a7474a7-217b-4690-8cf4-1829c1c17d9d",
+    "createdAt": "2026-04-08T12:57:37.636Z",
+    "type": "login",
+    "provider": "local",
+    "username": "admin",
+    "displayName": "Admin",
+    "email": null
+  },
+  {
+    "id": "d4e0df3e-79c1-4d94-b0c0-04d2b682b194",
+    "createdAt": "2026-04-08T12:54:57.571Z",
+    "type": "login",
+    "provider": "local",
+    "username": "admin",
+    "displayName": "Admin",
+    "email": null
+  },
+  {
+    "id": "050d297a-ce10-4b36-8d75-ec6613d5f3aa",
+    "createdAt": "2026-04-08T12:49:15.445Z",
+    "type": "login",
+    "provider": "local",
+    "username": "admin",
+    "displayName": "Admin",
+    "email": null
+  },
+  {
+    "id": "7af289ea-2643-4f6c-a2e8-50f9a1489742",
+    "createdAt": "2026-04-08T12:48:31.454Z",
+    "type": "login",
+    "provider": "local",
+    "username": "admin",
+    "displayName": "Admin",
+    "email": null
+  },
+  {
+    "id": "3569d98f-b96a-47da-be89-20e4fadc9af2",
+    "createdAt": "2026-04-08T12:39:38.777Z",
+    "type": "login",
+    "provider": "local",
+    "username": "admin",
+    "displayName": "Admin",
+    "email": null
+  },
+  {
+    "id": "897a8c04-80de-42fe-8d07-fa7698d058b5",
+    "createdAt": "2026-04-08T12:36:07.780Z",
+    "type": "login",
+    "provider": "local",
+    "username": "admin",
+    "displayName": "Admin",
+    "email": null
+  },
+  {
+    "id": "9e6a497a-8207-4cf2-ba82-5049137c3468",
+    "createdAt": "2026-04-08T12:35:37.227Z",
+    "type": "login",
+    "provider": "local",
+    "username": "admin",
+    "displayName": "Admin",
+    "email": null
+  },
+  {
+    "id": "8c966b4e-aa06-4e4c-a616-e62b83962b4f",
+    "createdAt": "2026-04-08T12:30:02.183Z",
+    "type": "login",
+    "provider": "local",
+    "username": "admin",
+    "displayName": "Admin",
+    "email": null
+  }
+]
