@@ -2,6 +2,10 @@ const mysql = require("mysql2/promise");
 
 let pool;
 
+function getDataProvider() {
+  return String(process.env.DATA_PROVIDER || "file").trim().toLowerCase();
+}
+
 function getPool() {
   if (!pool) {
     pool = mysql.createPool({
@@ -19,4 +23,4 @@ function getPool() {
   return pool;
 }
 
-module.exports = { getPool };
+module.exports = { getPool, getDataProvider };

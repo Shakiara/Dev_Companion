@@ -327,6 +327,24 @@ SOURCE database/dev_companion.sql;
 
 If MySQL is not available, the app still runs using local JSON files in `backend/data/`.
 
+For stable local development, the default provider is file-based JSON storage:
+
+```env
+DATA_PROVIDER=file
+```
+
+If you want to force MySQL instead, set:
+
+```env
+DATA_PROVIDER=mysql
+```
+
+If you want the old behavior where the app tries MySQL first and falls back to files, set:
+
+```env
+DATA_PROVIDER=auto
+```
+
 ### 6. Start the app
 
 ```bash

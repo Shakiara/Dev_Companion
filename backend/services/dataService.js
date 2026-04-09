@@ -1,4 +1,4 @@
-const { getPool } = require("../config/db");
+const { getPool, getDataProvider } = require("../config/db");
 const {
   listItems,
   getItem,
@@ -15,6 +15,18 @@ async function tryMysql(work) {
 }
 
 async function withFallback(mysqlWork, fileWork) {
+  const provider = getDataProvider();
+
+  if (provider === "file") {
+    const data = await fileWork();
+    return { data, source: "file" };
+  }
+
+  if (provider === "mysql") {
+    const data = await tryMysql(mysqlWork);
+    return { data, source: "mysql" };
+  }
+
   try {
     const data = await tryMysql(mysqlWork);
     return { data, source: "mysql" };
