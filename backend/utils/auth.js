@@ -1,6 +1,7 @@
 const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
+const { broadcastAdminRefresh } = require("./adminRealtime");
 
 const SESSION_COOKIE = "dev_companion_session";
 const SESSION_DURATION_MS = 1000 * 60 * 60 * 12;
@@ -110,6 +111,7 @@ function createUserAccount({ username, displayName, password }) {
 
   users.push(user);
   writeUsers(users);
+  broadcastAdminRefresh("user-account-created");
   return { user };
 }
 
@@ -121,6 +123,7 @@ function recordAuthEvent(event) {
     ...event
   });
   writeAuthLog(events.slice(0, 200));
+  broadcastAdminRefresh("auth-event-recorded");
 }
 
 function recordUserActivity(event) {
@@ -131,6 +134,7 @@ function recordUserActivity(event) {
     ...event
   });
   writeActivityLog(events.slice(0, 400));
+  broadcastAdminRefresh("user-activity-recorded");
 }
 
 function makeUniqueUsername(baseUsername, users) {
@@ -160,6 +164,7 @@ function createOrUpdateOAuthUser({ provider, providerId, email, username, displa
     user.authProvider = provider;
     user.providerId = providerId;
     writeUsers(users);
+    broadcastAdminRefresh("oauth-user-updated");
     return user;
   }
 
@@ -174,6 +179,7 @@ function createOrUpdateOAuthUser({ provider, providerId, email, username, displa
 
   users.push(user);
   writeUsers(users);
+  broadcastAdminRefresh("oauth-user-created");
   return user;
 }
 
@@ -194,6 +200,7 @@ function setLocalUserPassword(username, password) {
   user.passwordHash = hashPassword(password);
   user.passwordUpdatedAt = new Date().toISOString();
   writeUsers(users);
+  broadcastAdminRefresh("user-password-reset");
 
   return {
     user: {
@@ -238,6 +245,7 @@ function deleteUserAccount(username) {
   const [deletedUser] = users.splice(index, 1);
   writeUsers(users);
   removeSessionsForUsername(deletedUser.username);
+  broadcastAdminRefresh("user-account-deleted");
 
   return {
     user: {
@@ -315,6 +323,7 @@ function purgeUserHistory(username) {
   writeActivityLog(
     readActivityLog().filter((event) => normalizeUsername(event.username) !== normalizedUsername)
   );
+  broadcastAdminRefresh("user-history-purged");
 }
 
 function verifyPassword(user, password) {
