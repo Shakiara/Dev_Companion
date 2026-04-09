@@ -6,6 +6,7 @@ const endpoints = {
   adminUsers: "/api/admin/users",
   adminResetPassword: (username) => `/api/admin/users/${encodeURIComponent(username)}/reset-password`,
   adminDeleteUser: (username) => `/api/admin/users/${encodeURIComponent(username)}`,
+  adminStream: "/api/admin/stream",
   projects: "/api/projects",
   ideas: "/api/ideas",
   errors: "/api/errors",
@@ -33,6 +34,9 @@ const state = {
   notes: [],
   dashboard: null
 };
+
+let adminEventSource = null;
+let adminReloadTimer = null;
 
 const authShell = document.getElementById("auth-shell");
 const appShell = document.getElementById("app-shell");
@@ -624,6 +628,55 @@ async function loadAdminPanels() {
   state.activityEvents = data.activityEvents || [];
 }
 
+function closeAdminStream() {
+  if (adminEventSource) {
+    adminEventSource.close();
+    adminEventSource = null;
+  }
+}
+
+function scheduleAdminRefresh() {
+  if (adminReloadTimer) {
+    return;
+  }
+
+  adminReloadTimer = window.setTimeout(async () => {
+    adminReloadTimer = null;
+
+    if (!state.user?.isAdmin) {
+      return;
+    }
+
+    try {
+      await loadAdminPanels();
+      renderAdminPanels();
+      adminFeedback.textContent = "Admin activity updated automatically.";
+    } catch (error) {
+      adminFeedback.textContent = "Unable to refresh admin activity automatically right now.";
+    }
+  }, 250);
+}
+
+function openAdminStream() {
+  closeAdminStream();
+
+  if (!state.user?.isAdmin) {
+    return;
+  }
+
+  adminEventSource = new EventSource(endpoints.adminStream, {
+    withCredentials: true
+  });
+
+  adminEventSource.addEventListener("admin-refresh", () => {
+    scheduleAdminRefresh();
+  });
+
+  adminEventSource.onerror = () => {
+    adminFeedback.textContent = "Reconnecting admin live updates...";
+  };
+}
+
 async function loadApp() {
   showMessage("Loading workspace data...");
   clearFeedback();
@@ -678,6 +731,7 @@ async function boot() {
 
     showAppScreen();
     await loadApp();
+    openAdminStream();
   } catch (error) {
     showAuthScreen();
     loginFeedback.textContent = "Unable to verify session right now.";
@@ -926,6 +980,7 @@ loginForm.addEventListener("submit", async (event) => {
     loginFeedback.textContent = "";
     showAppScreen();
     await loadApp();
+    openAdminStream();
   } catch (error) {
     loginFeedback.textContent = error.message;
   }
@@ -945,10 +1000,13 @@ logoutButton.addEventListener("click", async () => {
 
   state.authenticated = false;
   state.user = null;
+  closeAdminStream();
   showAuthScreen();
   loginFeedback.textContent = "";
   showMessage("Sign in to continue.");
 });
+
+window.addEventListener("beforeunload", closeAdminStream);
 
 boot().catch((error) => {
   showAuthScreen();
